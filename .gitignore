@@ -6,6 +6,6 @@ env.py
 
 __pycache__ 
 
-zillow.csv
+zillow_df.csv
 
 working-jupy.ibynb
