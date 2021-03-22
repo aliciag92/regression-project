@@ -21,6 +21,7 @@ def get_connection(db, user=user, host=host, password=password):
     return f'mysql+pymysql://{user}:{password}@{host}/{db}'
 
 
+
 # defines function to get zillow data from MySQL and return as a pandas DataFrame
 def get_zillow_data():
     '''
@@ -46,7 +47,8 @@ def get_zillow_data():
     return df
 
 
-# adds caching to get_titanic_data and checks for local filename (titanic.csv)
+
+# adds caching to get_zillow_data and checks for local filename (zillow_df.csv)
 # if file exists, uses the .csv file
 # if file doesn't exist, then produces SQL & pandas necessary to create a df, then write the df to a .csv file
 def cached_zillow(cached=False):
@@ -80,19 +82,93 @@ def cached_zillow(cached=False):
 def clean_zillow(df):
     '''
     clean_zillow will take one argument df, a pandas dataframe and will:
-    fill in missing values
-    replace missing values from total_charges and convert to float
-    blah blah blah more cleaning that needs to be done
+    grab the features needed for estimating home value,
+    set parcelid as new index,
+    rename columns for readability,
+    calculate age of home,
+    drop null values,
+    convert data types to integers, 
+    remove outliers from square_feet and tax_value, 
+    and calculate tax rate
 
     return: a single pandas dataframe with the above operations performed
     '''
     
-    #fill missing numbers
+    #select only certain features needed for project
+    features = ['parcelid', 
+                'bedroomcnt', 
+                'bathroomcnt', 
+                'calculatedfinishedsquarefeet', 
+                'fips', 
+                'regionidcounty',
+                'yearbuilt',
+                'taxvaluedollarcnt', 
+                'taxamount']
+
+    df = df[features]   
+    
+    #set parcelid as index
+    df = df.set_index("parcelid")
+
+    #rename columns
+    df = df.rename(columns={"parcelid": "parcel_id",
+                            "bedroomcnt": "bedrooms", 
+                            "bathroomcnt": "bathrooms", 
+                            "calculatedfinishedsquarefeet":"square_feet", 
+                            "regionidcounty": "county",
+                            "taxamount": "taxes",
+                            "taxvaluedollarcnt": "tax_value", 
+                            "yearbuilt": "age"})
+    
+    #convert year built to get the property age
+    df.age = 2017 - df.age
+
+    #drop the nulls
+    df = df.dropna(subset=['square_feet', 'age', 'tax_value', 'taxes'])
     df = df.fillna(0)
-    
-    #replace total_charges missing values and convert to float
-    df.total_charges = df.total_charges.str.replace(' ', '0').astype(float)
-    
+
+
+    #convert dtypes to integers
+    df.bedrooms = df.bedrooms.astype('int64')
+    df.square_feet = df.square_feet.astype('int64')
+    df.fips = df.fips.astype('int64')
+    df.county = df.county.astype('int64')
+    df.age = df.age.astype('int64')
+    df.tax_value = df.tax_value.astype('int64')
+
+            
+    #remove outliers from square_feet
+    #calculate IQR
+    q1sf = df.square_feet.quantile(.25)
+    q3sf = df.square_feet.quantile(.75)
+    iqrsf = q3sf - q1sf
+            
+    #calculate upper and lower bounds, outlier if above or below these
+    uppersf = q3sf + (1.5 * iqrsf)
+    lowersf = q1sf - (1.5 * iqrsf)
+        
+    #filter out the lower and upper outliers
+    df = df[df.square_feet > lowersf]
+    df = df[df.square_feet < uppersf]
+
+    #remove outliers from tax_value
+    #calculate IQR
+    q1tv = df.tax_value.quantile(.25)
+    q3tv = df.tax_value.quantile(.75)
+    iqrtv = q3tv - q1tv
+            
+    #calculate upper and lower bounds, outlier if above or below these
+    uppertv = q3tv + (1.5 * iqrtv)
+    lowertv = q1tv - (1.5 * iqrtv)
+        
+    #filter out the lower and upper outliers
+    df = df[df.tax_value > lowertv]
+    df = df[df.tax_value < uppertv]
+
+    #calculate tax rate using property's assessed value and the amount paid each year
+                     #tax paid / tax value * 100 = tax rate%
+    df['tax_rate'] = (df.taxes / df.tax_value) * 100
+
 
     return df
 
