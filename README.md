@@ -23,15 +23,16 @@
 
 ### Data Dictionary
 
-First Header | Second Header
------------- | -------------
-Content from cell 1 | Content from cell 2
-Content in the first column | Content in the second column
-Content in the first column | Content in the second column
-Content in the first column | Content in the second column
-Content in the first column | Content in the second column
-Content in the first column | Content in the second column
-Content in the first column | Content in the second column
+Feature      | Description   | Data Type
+------------ | ------------- | ------------
+bedrooms |  Number of bedrooms in home  | int 
+bathrooms | Number of bathrooms in home including fractional bathrooms | float
+square_feet |  Calculated total finished living area of the home  | int 
+county_fips_code |  Federal Information Processing Standard code -  see https://en.wikipedia.org/wiki/FIPS_county_code for more details | int
+age |  The difference between the predicting year  and the year the principal residence was built  | int
+tax_value | The total tax assessed value of the parcel | int
+taxes | The total property tax assessed for that assessment year | float
+tax_rate | Calculated column by using the property’s assessed value (tax_value) and the taxes paid each year | float
 
 ****
 
