@@ -82,7 +82,7 @@ def cached_zillow(cached=False):
 def clean_zillow(df):
     '''
     clean_zillow will take one argument df, a pandas dataframe and will:
-    grab the features needed for estimating home value,
+    grab the features needed for estimating home value and confirming property location,
     set parcelid as new index,
     rename columns for readability,
     calculate age of home,
@@ -100,7 +100,6 @@ def clean_zillow(df):
                 'bathroomcnt', 
                 'calculatedfinishedsquarefeet', 
                 'fips', 
-                'regionidcounty',
                 'yearbuilt',
                 'taxvaluedollarcnt', 
                 'taxamount']
@@ -115,7 +114,7 @@ def clean_zillow(df):
                             "bedroomcnt": "bedrooms", 
                             "bathroomcnt": "bathrooms", 
                             "calculatedfinishedsquarefeet":"square_feet", 
-                            "regionidcounty": "county",
+                            "fips": "county_fips_code",
                             "taxamount": "taxes",
                             "taxvaluedollarcnt": "tax_value", 
                             "yearbuilt": "age"})
@@ -131,16 +130,14 @@ def clean_zillow(df):
     #convert dtypes to integers
     df.bedrooms = df.bedrooms.astype('int64')
     df.square_feet = df.square_feet.astype('int64')
-    df.fips = df.fips.astype('int64')
-    df.county = df.county.astype('int64')
+    df.county_fips_code = df.county_fips_code.astype('int64')
     df.age = df.age.astype('int64')
     df.tax_value = df.tax_value.astype('int64')
 
             
     #remove outliers from square_feet
     #calculate IQR
-    q1sf = df.square_feet.quantile(.25)
-    q3sf = df.square_feet.quantile(.75)
+    q1sf, q3sf = df.square_feet.quantile([.25, .75])
     iqrsf = q3sf - q1sf
             
     #calculate upper and lower bounds, outlier if above or below these
@@ -153,8 +150,7 @@ def clean_zillow(df):
 
     #remove outliers from tax_value
     #calculate IQR
-    q1tv = df.tax_value.quantile(.25)
-    q3tv = df.tax_value.quantile(.75)
+    q1tv, q3tv = df.tax_value.quantile([.25, .75])
     iqrtv = q3tv - q1tv
             
     #calculate upper and lower bounds, outlier if above or below these
@@ -191,30 +187,20 @@ def split(df):
 
 
 # defines MinMaxScaler() and returns scaled data
-def min_max_scaler(train, validate, test):
-    '''
-    Takes in train, validate and test dfs with numeric values only, 
+def Min_Max_Scaler(X_train, X_validate, X_test):
+    """
+    Takes in X_train, X_validate and X_test dfs with numeric values only
     makes, fits, and uses/transforms the data,
-    turns the scaled arrays into dataframes
+    
+    Returns X_train_scaled, X_validate_scaled, X_test_scaled dfs 
+    """
 
-    Returns (scaler, X_train_scaled, X_validate_scaled, X_test_scaled)
-    '''
+    #make and fit
+    scaler = sklearn.preprocessing.MinMaxScaler().fit(X_train)
 
-    #make
-    scaler = sklearn.preprocessing.MinMaxScaler()
-
-    #fit
-    scaler.fit(train)
-
-    #use
-    X_train_scaled = scaler.transform(train)
-    X_validate_scaled = scaler.transform(validate)
-    X_test_scaled = scaler.transform(test)
-
-    # turn the numpy arrays into dataframes
-    X_train_scaled = pd.DataFrame(X_train_scaled, columns=X_train.columns)
-    X_validate_scaled = pd.DataFrame(X_validate_scaled, columns=X_train.columns)
-    X_test_scaled = pd.DataFrame(X_test_scaled, columns=X_train.columns)
-
-
-    return scaler, X_train_scaled, X_validate_scaled, X_test_scaled 
+    #use and turn numpy arrays into dataframes
+    X_train_scaled = pd.DataFrame(scaler.transform(X_train), index = X_train.index, columns = X_train.columns)
+    X_validate_scaled = pd.DataFrame(scaler.transform(X_validate), index = X_validate.index, columns = X_validate.columns)
+    X_test_scaled = pd.DataFrame(scaler.transform(X_test), index = X_test.index, columns = X_test.columns)
+    
+    return X_train_scaled, X_validate_scaled, X_test_scaled
