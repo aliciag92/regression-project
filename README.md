@@ -8,7 +8,7 @@
 
 ### Goals
 
-[ x ] Predict the values of single unit properties using the property data from those with a transaction during May-August 2017 based on the tax assessed value.
+[ x ] Develop a regression model that can predict the values of single unit properties using the property data from those with a transaction during May-August 2017 based on the tax assessed value.
 
 
 
@@ -65,7 +65,7 @@ tax_rate | Calculated column by using the property’s assessed value (tax_value
 
 #### 4. Model/Evaluate
 - Establish and evaluate a baseline model
-- Develop various regression models with varying hyperparameters (as many as needed) and settle on the best model by plotting residuals and comparing evaluation metrics.
+- Generate various regression algorithms with varying hyperparameters (as many as needed) and settle on the best algorithm by plotting residuals and comparing evaluation metrics.
 - Choose the best model and test that final model on out-of-sample data
 - Summarize performance, interpret, and document results.
 
@@ -80,3 +80,4 @@ tax_rate | Calculated column by using the property’s assessed value (tax_value
 - You can always do your own exploring, modeling, and evaluating to deliver any new information.
 
 ****
+![Zillow](https://1000logos.net/wp-content/uploads/2017/11/Color-Zillow-Logo.jpg)
