@@ -163,7 +163,7 @@ def clean_zillow(df):
 
     #calculate tax rate using property's assessed value and the amount paid each year
                      #tax paid / tax value * 100 = tax rate%
-    df['tax_rate'] = (df.taxes / df.tax_value) * 100
+    df['tax_rate'] = round(((df.taxes / df.tax_value) * 100), 2)
 
 
     return df
