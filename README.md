@@ -70,7 +70,7 @@ tax_rate | Calculated column by using the property’s assessed value (tax_value
 - Summarize performance, interpret, and document results.
 
 #### 5. Deliver
-- Summarization of findings about the drivers of the single unit property values in a [report summary](link to google slides presentation). 
+- Summarization of findings about the drivers of the single unit property values in a [report summary](https://docs.google.com/presentation/d/1z8M6uMmNz0o89Z0B0laBm0DcDtgUHr0YVfXxqvU4460/edit?usp=sharing). 
 
 
 ****
