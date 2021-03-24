@@ -1,4 +1,4 @@
-# Estimating Home Values 
+# Prediction of Home Values 
 ![Zillow](https://1000logos.net/wp-content/uploads/2017/11/Color-Zillow-Logo.jpg)
 ****
 
@@ -21,6 +21,13 @@
 
 **** 
 
+### Initial hypotheses
+Is there a correlation between square footage of a home and its tax value?
+Is there a difference in tax value for homes one location vs the other? 
+Is there a difference in tax value for homes with a property age over 50 vs the homes that are less than 50?
+
+****
+
 ### Data Dictionary
 
 Feature      | Description   | Data Type
@@ -39,7 +46,7 @@ tax_rate | Calculated column by using the property’s assessed value (tax_value
 ### Pipeline Process:
 
 #### Plan
-- State project description and goals
+- Understand project description and goals 
 - Form hypotheses and brainstorm ideas
 - Have all necessary imports ready for project
 
@@ -48,15 +55,15 @@ tax_rate | Calculated column by using the property’s assessed value (tax_value
     - create a sql url using personal credentials
     - get zillow data from MySQL and return as a pandas DataFrame
     - add caching to get_zillow_data to obtain the data quickly
-- All functions to acquire the data are included in [wrangle.py](https://github.com/aliciag92/regression-project/blob/main/wrangle.py)
-- Complete some initial data summarization and plot distributions of individual variables to get to know data and know what is needed to be prepped/cleaned
+- Functions to acquire the data are included in [wrangle.py](https://github.com/aliciag92/regression-project/blob/main/wrangle.py)
+- Complete initial data summarization and plot distributions of individual variables to get to know data and know what is needed to be prepped/cleaned
 
 #### 2. Prepare
 - Define functions to:
     - clean zillow data and return as a cleaned pandas DataFrame
     - split the dataframe into train, validate, test 
     - scale the data
-- All functions to prepare the data are included in [wrangle.py](https://github.com/aliciag92/regression-project/blob/main/wrangle.py)
+- Functions to prepare the data are included in [wrangle.py](https://github.com/aliciag92/regression-project/blob/main/wrangle.py)
 
 #### 3. Explore
 - Address questions posed in planning and brainstorming and figure out drivers to predict home values
@@ -70,14 +77,18 @@ tax_rate | Calculated column by using the property’s assessed value (tax_value
 - Summarize performance, interpret, and document results.
 
 #### 5. Deliver
-- Summarization of findings about the drivers of the single unit property values in a [report summary](https://docs.google.com/presentation/d/1z8M6uMmNz0o89Z0B0laBm0DcDtgUHr0YVfXxqvU4460/edit?usp=sharing). 
+- OLS model using LinearRegression with features from prepped data outperformed baseline and all other models:
+    - RMSE: 196,823.86
+    - R-squared value: 0.23
+- The OLS Linear Regression Model should be used moving forward as it predicts home value.
+- Summarization of findings about the drivers of the single unit property values can be found here in my [report summary](https://docs.google.com/presentation/d/1z8M6uMmNz0o89Z0B0laBm0DcDtgUHr0YVfXxqvU4460/edit?usp=sharing). 
 
 
 ****
 
 ### Recreating Project
-- To reproduce project, download [wrangle.py](https://github.com/aliciag92/regression-project/blob/main/wrangle.py) and [zillow-report.ipynb](https://github.com/aliciag92/regression-project/blob/main/zillow-report.ipynb) in your working directory and follow the steps from the pipeline process above
-- You can always do your own exploring, modeling, and evaluating to deliver any new information.
+- To reproduce this project, download [wrangle.py](https://github.com/aliciag92/regression-project/blob/main/wrangle.py) and [zillow-report.ipynb](https://github.com/aliciag92/regression-project/blob/main/zillow-report.ipynb) in your working directory and follow the steps from the pipeline process above
+- You can always obtain more features, or remove the ones you do not want, do your own exploring, modeling, and evaluating to deliver any new information.
 
 ****
 ![Zillow](https://1000logos.net/wp-content/uploads/2017/11/Color-Zillow-Logo.jpg)
