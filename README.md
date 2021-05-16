@@ -1,4 +1,4 @@
-# Prediction of Home Values 
+# Prediction of Zillow Home Values 
 ![Zillow](https://1000logos.net/wp-content/uploads/2017/11/Color-Zillow-Logo.jpg)
 ****
 
@@ -22,9 +22,9 @@
 **** 
 
 ### Initial hypotheses
-Is there a correlation between square footage of a home and its tax value?
-Is there a difference in tax value for homes one location vs the other? 
-Is there a difference in tax value for homes with a property age over 50 vs the homes that are less than 50?
+- Is there a correlation between square footage of a home and its tax value?
+- Is there a difference in tax value for homes one location vs the other? 
+- Is there a difference in tax value for homes with a property age over 50 vs the homes that are less than 50?
 
 ****
 
